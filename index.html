@@ -37,28 +37,36 @@
 
     <a-entity mindar-image-target="targetIndex: 0">
 
+      <a-plane
+        color="black"
+        opacity="0.75"
+        position="0 0.55 0"
+        width="1.8"
+        height="0.35">
+      </a-plane>
+
       <a-text 
         value="뉴욕 자유의 여신상"
         color="yellow"
-        position="0 0.6 0"
+        position="0 0.55 0.05"
         align="center"
-        width="2">
+        width="2.6">
       </a-text>
 
       <a-plane 
         color="blue"
-        position="0 -0.5 0"
-        width="1.2"
-        height="0.4"
+        position="0 -0.45 0"
+        width="1.4"
+        height="0.38"
         class="clickable">
       </a-plane>
 
       <a-text 
         value="영상 보기"
         color="white"
-        position="0 -0.5 0.1"
+        position="0 -0.45 0.08"
         align="center"
-        width="2">
+        width="2.2">
       </a-text>
 
     </a-entity>
@@ -66,7 +74,7 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", function () {
-      const plane = document.querySelector("a-plane");
+      const plane = document.querySelector(".clickable");
       plane.addEventListener("click", function () {
         window.open("https://youtube.com/shorts/C7Yl5-dFYKw", "_blank");
       });
