@@ -14,7 +14,7 @@
       height: 100%;
       overflow: hidden;
       font-family: Arial, sans-serif;
-      background: #000;
+      background: transparent;
     }
 
     a-scene {
@@ -23,6 +23,11 @@
       position: fixed !important;
       top: 0;
       left: 0;
+      background: transparent !important;
+    }
+
+    canvas {
+      background: transparent !important;
     }
 
     #startPanel {
@@ -64,7 +69,6 @@
       border-radius: 10px;
       text-align: center;
       width: 86%;
-      line-height: 1.4;
     }
 
     #arInfo {
@@ -79,22 +83,20 @@
     }
 
     #title {
-      background: rgba(0, 0, 0, 0.78);
       color: yellow;
-      font-size: 26px;
+      font-size: 30px;
       font-weight: bold;
-      padding: 12px 18px;
-      border-radius: 12px;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
+      text-shadow: 3px 3px 5px black;
     }
 
     #videoBtn {
       background: #064ff0;
       color: white;
-      font-size: 22px;
+      font-size: 24px;
       font-weight: bold;
-      padding: 12px 24px;
-      border-radius: 12px;
+      padding: 12px 28px;
+      border-radius: 14px;
       border: none;
     }
   </style>
@@ -122,6 +124,7 @@
     id="scene"
     mindar-image="imageTargetSrc: targets.mind; autoStart: false;" 
     embedded
+    renderer="alpha: true; colorManagement: true"
     vr-mode-ui="enabled: false"
     device-orientation-permission-ui="enabled: false"
   >
@@ -146,8 +149,7 @@
       } catch (e) {}
 
       try {
-        const videos = document.querySelectorAll("video");
-        videos.forEach(video => {
+        document.querySelectorAll("video").forEach(video => {
           if (video.srcObject) {
             video.srcObject.getTracks().forEach(track => track.stop());
           }
@@ -160,10 +162,9 @@
       guide.style.display = "block";
 
       try {
-        const mindarSystem = sceneEl.systems["mindar-image-system"];
-        await mindarSystem.start();
+        await sceneEl.systems["mindar-image-system"].start();
       } catch (e) {
-        alert("AR 실행이 지연되고 있습니다. 새로고침 후 다시 AR 시작하기를 눌러주세요.");
+        alert("AR 실행이 지연되고 있습니다. 새로고침 후 다시 시도해 주세요.");
       }
     });
 
