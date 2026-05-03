@@ -14,6 +14,7 @@
       height: 100%;
       overflow: hidden;
       font-family: Arial, sans-serif;
+      background: #000;
     }
 
     a-scene {
@@ -36,7 +37,7 @@
     }
 
     #title {
-      background: rgba(0, 0, 0, 0.75);
+      background: rgba(0, 0, 0, 0.78);
       color: yellow;
       font-size: 26px;
       font-weight: bold;
@@ -46,7 +47,7 @@
     }
 
     #videoBtn {
-      background: blue;
+      background: #064ff0;
       color: white;
       font-size: 22px;
       font-weight: bold;
@@ -54,10 +55,30 @@
       border-radius: 12px;
       border: none;
     }
+
+    #guide {
+      position: fixed;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 9999;
+      background: rgba(0, 0, 0, 0.65);
+      color: white;
+      font-size: 16px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      text-align: center;
+      width: 86%;
+      line-height: 1.4;
+    }
   </style>
 </head>
 
 <body>
+
+  <div id="guide">
+    자유의 여신상 이미지를 비춰보세요
+  </div>
 
   <div id="arInfo">
     <div id="title">뉴욕 자유의 여신상</div>
@@ -65,7 +86,8 @@
   </div>
 
   <a-scene 
-    mindar-image="imageTargetSrc: targets.mind;" 
+    id="scene"
+    mindar-image="imageTargetSrc: targets.mind; autoStart: true;" 
     embedded
     vr-mode-ui="enabled: false"
     device-orientation-permission-ui="enabled: false"
@@ -79,19 +101,53 @@
 
   <script>
     const arInfo = document.getElementById("arInfo");
+    const guide = document.getElementById("guide");
     const target = document.getElementById("target");
     const videoBtn = document.getElementById("videoBtn");
+    const sceneEl = document.getElementById("scene");
+
+    function stopAR() {
+      try {
+        if (sceneEl && sceneEl.systems && sceneEl.systems["mindar-image-system"]) {
+          sceneEl.systems["mindar-image-system"].stop();
+        }
+      } catch (e) {
+        console.log("AR stop skipped:", e);
+      }
+
+      try {
+        const videos = document.querySelectorAll("video");
+        videos.forEach(video => {
+          if (video.srcObject) {
+            video.srcObject.getTracks().forEach(track => track.stop());
+          }
+        });
+      } catch (e) {
+        console.log("Camera stop skipped:", e);
+      }
+    }
 
     target.addEventListener("targetFound", () => {
       arInfo.style.display = "block";
+      guide.style.display = "none";
     });
 
     target.addEventListener("targetLost", () => {
       arInfo.style.display = "none";
+      guide.style.display = "block";
     });
 
     videoBtn.addEventListener("click", () => {
-      window.open("https://youtube.com/shorts/C7Yl5-dFYKw", "_blank");
+      stopAR();
+      window.location.href = "https://youtube.com/shorts/C7Yl5-dFYKw";
+    });
+
+    window.addEventListener("beforeunload", () => {
+      stopAR();
+    });
+
+    window.addEventListener("pagehide", () => {
+      stopAR();
     });
   </script>
 
